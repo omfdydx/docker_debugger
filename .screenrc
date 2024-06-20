@@ -1,0 +1,19 @@
+startup_message off
+screen -t Xterm            	1 bash
+screen -t Terminal -h 2000	2 bash
+screen -t Bash			3 bash
+hardstatus alwayslastline '%{= M} %H%{= G} [%l] %= %{= w}%-w%{+b r}%n*%t%{-b r}%{w}%+w %= %{c}%d %D %{B}%C%a '
+
+bindkey -m ^[[1;5D prev
+bindkey -m ^[[1;5C next
+bindkey -m ^[[1;2D prev
+bindkey -m ^[[1;2C next
+
+#screen key binding
+bind -c demo1 0 select 10
+
+#create a binding for screens with numbers greater than 9
+bindkey "^Z" command -c demo1
+
+#default selection for the screen
+select 1
