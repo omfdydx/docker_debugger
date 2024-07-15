@@ -26,4 +26,4 @@ WORKDIR $APP_HOME
 
 COPY . $APP_HOME
 EXPOSE $PORT
-CMD ["python", "server.py", "--port=${FLASK_RUN_PORT}"]
+CMD ["python", "server.py"]
