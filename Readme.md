@@ -11,7 +11,7 @@ Packed with a simple api server to keep it even if there are some scripts up and
 * httpie
 * iputils-ping
 * jq
-* nodejs
+* flask
 * nano
 * vim
 * postgresql-client
