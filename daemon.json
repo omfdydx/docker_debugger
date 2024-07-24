@@ -1,0 +1,6 @@
+{
+  "features": {
+    "containerd-snapshotter": true
+  }
+}
+// https://docs.docker.com/storage/containerd/

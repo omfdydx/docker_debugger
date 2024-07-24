@@ -19,3 +19,7 @@ Packed with a simple api server to keep it even if there are some scripts up and
 ```
 
 WIP - will keep including tools further needed for debugging Kubernetes / Docker based deployments
+
+`docker buildx  build -t omfdy/docker-debugger:latest --attest type=provenance,mode=max --sbom=true .`
+
+`docker push <image>:<tag>`
