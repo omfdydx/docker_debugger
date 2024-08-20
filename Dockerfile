@@ -11,14 +11,21 @@ RUN apk add --no-cache \
   mongodb-tools \
   wget \
   redis \
-  httpie \
   iputils-ping \
   jq \
   nano \
   vim \
   postgresql-client \
   bash \
-  py3-flask
+  py3-flask \
+  kafkacat \
+  inetutils-telnet \
+  nmap \
+  socat \
+  netcat-openbsd \
+  openssh \
+  bash-completion
+
 
 RUN addgroup --gid ${UTILS_USER_GID} ${USER} && adduser --disabled-password --uid ${UTILS_USER_UID} --ingroup ${USER} ${USER}
 USER utils
