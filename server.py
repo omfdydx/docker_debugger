@@ -1,3 +1,9 @@
+"""
+Simple flask server to keep a Docker container running indefinitely.
+
+This server is meant to be used in a Docker container for testing/debugging
+purposes. It will keep the container running until it is explicitly stopped.
+"""
 import os
 from flask import Flask
 from flask import make_response, jsonify
