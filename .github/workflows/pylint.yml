@@ -1,6 +1,11 @@
 name: Pylint
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.py'
 
 jobs:
   build:
