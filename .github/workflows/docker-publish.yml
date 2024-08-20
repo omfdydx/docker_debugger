@@ -36,5 +36,5 @@ jobs:
         id: attest
         with:
           subject-name: ${{ secrets.DOCKER_USERNAME }}/docker-debugger
-          subject-digest: ${{ steps.push.outputs.digest }}
+          subject-digest: ${{ steps.build_and_push.outputs.digest }}
           push-to-registry: true
