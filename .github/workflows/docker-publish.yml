@@ -77,18 +77,8 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/docker-debugger:${{ env.version }}
             ${{ secrets.DOCKER_USERNAME }}/docker-debugger:latest
 
-          build-args: --attest type=provenance,mode=max --sbom=true
-
-      - name: Generate SBOM attestation
-        uses: actions/attest-sbom@v1
-        with:
-          subject-name: ${{ secrets.DOCKER_USERNAME }}/docker-debugger:latest
-          subject-digest: ${{ steps.build_and_push.outputs.digest }}
-          sbom-path: 'sbom.json'
-          push-to-registry: true
-          registry: 'docker.io'
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          provenance: mode=max
+          sbom: true
 
       - name: Create Git Tag
         run: |
