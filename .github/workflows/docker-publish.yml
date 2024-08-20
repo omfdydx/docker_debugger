@@ -24,26 +24,67 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Get the Current Version Tag
+        id: get_version
+        run: |
+          # Get the current version from tags
+          VERSION=$(git describe --tags --abbrev=0 || echo "v0.0.0")
+          VERSION=${VERSION#v}
+          
+          # Extract major, minor, and patch numbers
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+          
+          # Increment the patch version
+          PATCH=$((PATCH + 1))
+          
+          # If patch reaches 10, reset to 0 and increment minor
+          if [ $PATCH -ge 10 ]; then
+            PATCH=0
+            MINOR=$((MINOR + 1))
+          fi
+          
+          # If minor reaches 10, reset to 0 and increment major
+          if [ $MINOR -ge 10 ]; then
+            MINOR=0
+            MAJOR=$((MAJOR + 1))
+          fi
+          
+          # Create the new version string
+          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+          echo "New version: $NEW_VERSION"
+          echo "version=$NEW_VERSION" >> $GITHUB_ENV
+      
+      
+
       - name: Build and push to Docker Hub
         id: build_and_push
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/docker-debugger:latest
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/docker-debugger:${{ env.version }}
+            ${{ secrets.DOCKER_USERNAME }}/docker-debugger:latest
+
           build-args: --attest type=provenance,mode=max --sbom=true
+      - name: Create Git Tag
+        run: |
+          git tag ${{ env.version }}
+          git push origin ${{ env.version }}
 
 #      - name: Log in to Docker Registry for Attestation
 #        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Attest
-        uses: actions/attest-build-provenance@v1
-        id: attest
-        with:
-          subject-name: ${{ secrets.DOCKER_USERNAME }}/docker-debugger
-          subject-digest: ${{ steps.build_and_push.outputs.digest }}
-          push-to-registry: true
-          registry: docker.io  # Explicitly specify Docker Hub registry
-        env:
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#      - name: Attest
+#        uses: actions/attest-build-provenance@v1
+#        id: attest
+#        with:
+#          subject-name: ${{ secrets.DOCKER_USERNAME }}/docker-debugger
+#          subject-digest: ${{ steps.build_and_push.outputs.digest }}
+#          push-to-registry: true
+#          registry: docker.io  # Explicitly specify Docker Hub registry
+#        env:
+#          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
