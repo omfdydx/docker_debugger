@@ -29,7 +29,7 @@ jobs:
         id: get_version
         run: |
           # Get the current version from tags
-          VERSION=$(git describe --tags --abbrev=0 || echo "v0.0.0")
+          VERSION=$(git describe --tags --abbrev=0 || echo "v1.0.0")
           VERSION=${VERSION#v}
           
           # Extract major, minor, and patch numbers
