@@ -26,6 +26,8 @@ RUN apk add --no-cache \
   openssh \
   bash-completion
 
+# Set bash as the default shell
+SHELL ["/bin/bash", "-c"]
 
 RUN addgroup --gid ${UTILS_USER_GID} ${USER} && adduser --disabled-password --uid ${UTILS_USER_UID} --ingroup ${USER} ${USER}
 USER utils
