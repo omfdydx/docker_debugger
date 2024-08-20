@@ -25,12 +25,14 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build and push to Docker Hub
+        id: build_and_push
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/docker-debugger:latest
           build-args: --attest type=provenance,mode=max --sbom=true
+          
       - name: Attest
         uses: actions/attest-build-provenance@v1
         id: attest
