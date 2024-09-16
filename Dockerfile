@@ -3,6 +3,14 @@ ENV USER=utils
 ENV UTILS_USER_GID=1000
 ENV UTILS_USER_UID=1000
 ENV APP_HOME=/home/${USER}
+
+#Install GoLang
+ENV GOROOT /usr/lib/go
+ENV GOPATH ${APP_HOME}/go
+ENV PATH ${APP_HOME}/go/bin:$PATH
+RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
+#Install GoLang
+
 ARG PORT=5050
 ENV FLASK_RUN_PORT=${PORT}
 RUN apk add --no-cache \
@@ -25,7 +33,8 @@ RUN apk add --no-cache \
   netcat-openbsd \
   openssh \
   bash-completion \
-  go
+  go \
+  musl-dev
 
 # Set bash as the default shell
 SHELL ["/bin/bash", "-c"]
