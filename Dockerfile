@@ -35,12 +35,16 @@ RUN apk add --no-cache \
   bash-completion \
   go \
   musl-dev \
-  findutils-locate
+  findutils-locate \
+  sudo
 
 # Set bash as the default shell
 SHELL ["/bin/bash", "-c"]
 
 RUN addgroup --gid ${UTILS_USER_GID} ${USER} && adduser --disabled-password --uid ${UTILS_USER_UID} --ingroup ${USER} ${USER}
+RUN mkdir -p /etc/sudoers.d \
+            && echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER} \
+            && chmod 0440 /etc/sudoers.d/${USER}
 USER utils
 WORKDIR $APP_HOME
 
