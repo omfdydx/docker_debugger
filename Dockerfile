@@ -24,7 +24,8 @@ RUN apk add --no-cache \
   socat \
   netcat-openbsd \
   openssh \
-  bash-completion
+  bash-completion \
+  go
 
 # Set bash as the default shell
 SHELL ["/bin/bash", "-c"]
