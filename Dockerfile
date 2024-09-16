@@ -34,7 +34,8 @@ RUN apk add --no-cache \
   openssh \
   bash-completion \
   go \
-  musl-dev
+  musl-dev \
+  findutils-locate
 
 # Set bash as the default shell
 SHELL ["/bin/bash", "-c"]
