@@ -1,5 +1,5 @@
 # Use the Alpine Linux base image, which is a lightweight and compact image
-FROM alpine:latest
+FROM alpine:edge
 
 # Set environment variables for the user and group IDs
 ENV USER=utils
