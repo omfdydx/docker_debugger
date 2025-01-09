@@ -29,7 +29,7 @@ You can then use the various CLI tools to test your network and services.
 * flask
 * nano
 * vim
-* pgcli - Postgres CLI
+* postgresql-client
 * bash
 * nmap
 * socat 
