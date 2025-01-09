@@ -1,5 +1,42 @@
+FROM alpine:edge
+
 # Use the Alpine Linux base image, which is a lightweight and compact image
 FROM alpine:edge
+
+# Install dependencies for building mongo-tools
+RUN apk add --update --no-cache \
+    gcc \
+    g++ \
+    make \
+    curl \
+    python3 \
+    go \
+    libc6-compat \
+    krb5-pkinit \
+    krb5-dev \
+    krb5
+
+# Set Go environment variables
+ENV GO111MODULE=on
+ENV GOPATH=/go
+ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
+
+# Define working directory
+WORKDIR /build
+
+
+# Clone the MongoDB Tools repository and build it
+RUN git clone --branch 100.10.0 https://github.com/mongodb/mongo-tools.git && \
+  mkdir bin && \
+  cd mongo-tools && \
+  ./make build && \
+  sudo cp bin/* /build/bin/ && \
+  cd .. && \
+  rm -rf mongo-tools
+
+# Create a lightweight image with only the tools
+FROM alpine:latest
+COPY --from=0 /build/bin/* /usr/local/bin/
 
 # Set environment variables for the user and group IDs
 ENV USER=utils
@@ -56,32 +93,11 @@ RUN addgroup --gid ${UTILS_USER_GID} ${USER} && adduser --disabled-password --ui
   echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER} && \
   chmod 0440 /etc/sudoers.d/${USER}
 
-# Install dependencies for building mongo-tools
-RUN apk add --update --no-cache \
-    gcc \
-    g++ \
-    make \
-    curl \
-    python3 \
-    go \
-    libc6-compat \
-    krb5-pkinit \
-    krb5-dev \
-    krb5
-
 # Switch to the new user
 USER utils
 
 # Set the working directory to the application home directory
 WORKDIR $APP_HOME
-
-# Clone the MongoDB Tools repository and build it
-RUN git clone --branch 100.10.0 https://github.com/mongodb/mongo-tools.git && \
-  cd mongo-tools && \
-  ./make build && \
-  sudo cp bin/* /usr/local/bin/ && \
-  cd .. && \
-  rm -rf mongo-tools
 
 # Copy the current directory (i.e. the Dockerfile directory) into the container
 COPY . $APP_HOME
