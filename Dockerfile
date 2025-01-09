@@ -67,7 +67,7 @@ RUN apk add --no-cache \
   jq \
   nano \
   vim \
-  postgresql-client \
+  pgcli \
   bash \
   py3-flask \
   kafkacat \
