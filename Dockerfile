@@ -1,10 +1,10 @@
-FROM alpine:edge
-
 # Use the Alpine Linux base image, which is a lightweight and compact image
-FROM alpine:edge
+FROM alpine:edge AS builder
 
 # Install dependencies for building mongo-tools
 RUN apk add --update --no-cache \
+    git \
+    bash \
     gcc \
     g++ \
     make \
@@ -23,20 +23,19 @@ ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
 
 # Define working directory
 WORKDIR /build
-
+RUN mkdir -p /build/bin
 
 # Clone the MongoDB Tools repository and build it
 RUN git clone --branch 100.10.0 https://github.com/mongodb/mongo-tools.git && \
-  mkdir bin && \
   cd mongo-tools && \
   ./make build && \
-  sudo cp bin/* /build/bin/ && \
+  cp bin/* /build/bin/ && \
   cd .. && \
   rm -rf mongo-tools
 
 # Create a lightweight image with only the tools
-FROM alpine:latest
-COPY --from=0 /build/bin/* /usr/local/bin/
+FROM alpine:edge
+COPY --from=builder /build/bin/* /usr/local/bin/
 
 # Set environment variables for the user and group IDs
 ENV USER=utils
