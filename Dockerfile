@@ -1,5 +1,5 @@
 # Use the Alpine Linux base image, which is a lightweight and compact image
-FROM alpine:edge AS builder
+FROM alpine:latest AS builder
 
 # Install dependencies for building mongo-tools
 RUN apk add --update --no-cache \
@@ -34,7 +34,7 @@ RUN git clone --branch 100.10.0 https://github.com/mongodb/mongo-tools.git && \
   rm -rf mongo-tools
 
 # Create a lightweight image with only the tools
-FROM alpine:edge
+FROM alpine:latest
 COPY --from=builder /build/bin/* /usr/local/bin/
 
 # Set environment variables for the user and group IDs
