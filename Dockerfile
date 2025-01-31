@@ -77,8 +77,6 @@ RUN apk add --no-cache \
   netcat-openbsd \
   openssh \
   bash-completion \
-  go \
-  musl-dev \
   findutils-locate \
   sudo \
   git
