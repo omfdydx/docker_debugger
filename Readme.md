@@ -53,12 +53,12 @@ WIP - will keep including tools further needed for debugging Kubernetes / Docker
 
 #### You will be seeing a bash prompt - 
 ###### __*e.g*__
-$redis-cli -h hostname -p port PING
+$ redis-cli -h <hostname> -p <port> PING
 >PONG
 
-$ psql -h hostname -U user -d database
+$ psql -h <hostname> -U <user> -d <database>
 
-$ ping <internal.service.name>
+$ ping <internal-service-name>
 
 $ screen -S __screen_name__
 
