@@ -29,15 +29,10 @@ RUN mkdir -p /build/bin
 # Clone the MongoDB Tools repository and build it
 RUN git clone --branch 100.11.0 https://github.com/mongodb/mongo-tools.git && \
   cd mongo-tools && \
-  ./make build -pkgs=mongodump,mongorestore,mongoexport,mongoimport,mongotop && \
+  ./make build && \
   cp bin/* /build/bin/ && \
   cd .. && \
   rm -rf mongo-tools
-ENV MONGOSH_VERSION=2.4.2
-RUN mkdir -p /build/mongosh
-RUN wget -qO- https://downloads.mongodb.com/compass/mongosh-${MONGOSH_VERSION}-linux-x64.tgz | tar -xz -C /build/mongosh --strip-components=1 \
-    && mv /build/mongosh/bin/mongosh* /build/bin && rm -rf /build/mongosh
-
 
 # Create a lightweight image with only the tools
 FROM alpine:latest
@@ -73,7 +68,6 @@ ENV FLASK_RUN_PORT=${PORT}
 
 # Install various packages and tools using apk
 RUN apk add --no-cache \
-  libstdc++ \
   screen \
   curl \
   wget \
@@ -95,7 +89,6 @@ RUN apk add --no-cache \
   findutils-locate \
   sudo \
   git \
-  go \
   krb5-pkinit \
   krb5-dev \
   krb5
