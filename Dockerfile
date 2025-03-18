@@ -14,7 +14,8 @@ RUN apk add --update --no-cache \
     libc6-compat \
     krb5-pkinit \
     krb5-dev \
-    krb5
+    krb5 \
+    wget
 
 # Set Go environment variables
 ENV GO111MODULE=on
