@@ -63,3 +63,5 @@ $ ping <internal-service-name>
 $ screen -S __screen_name__
 
 $ mongodump <options> <connection-string>
+
+$ mongosh <options> <connection-string>
