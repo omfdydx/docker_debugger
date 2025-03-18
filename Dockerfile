@@ -11,7 +11,6 @@ RUN apk add --update --no-cache \
     curl \
     python3 \
     go \
-    libc6-compat \
     krb5-pkinit \
     krb5-dev \
     krb5 \
@@ -30,7 +29,7 @@ RUN mkdir -p /build/bin
 # Clone the MongoDB Tools repository and build it
 RUN git clone --branch 100.11.0 https://github.com/mongodb/mongo-tools.git && \
   cd mongo-tools && \
-  ./make build && \
+  ./make build -pkgs=mongodump,mongorestore,mongoexport,mongoimport,mongotop && \
   cp bin/* /build/bin/ && \
   cd .. && \
   rm -rf mongo-tools
@@ -38,8 +37,16 @@ ENV MONGOSH_VERSION=2.4.2
 RUN mkdir -p /build/mongosh
 RUN wget -qO- https://downloads.mongodb.com/compass/mongosh-${MONGOSH_VERSION}-linux-x64.tgz | tar -xz -C /build/mongosh --strip-components=1 \
     && mv /build/mongosh/bin/mongosh* /build/bin && rm -rf /build/mongosh
+
+
 # Create a lightweight image with only the tools
 FROM alpine:latest
+
+#RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
+#    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r1/glibc-2.35-r1.apk && \
+#    apk add glibc-2.35-r1.apk && \
+#    rm glibc-2.35-r1.apk
+
 COPY --from=builder /build/bin/* /usr/local/bin/
 
 # Set environment variables for the user and group IDs
@@ -62,8 +69,11 @@ RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 ARG PORT=5050
 ENV FLASK_RUN_PORT=${PORT}
 
+
+
 # Install various packages and tools using apk
 RUN apk add --no-cache \
+  libstdc++ \
   screen \
   curl \
   wget \
@@ -84,7 +94,11 @@ RUN apk add --no-cache \
   bash-completion \
   findutils-locate \
   sudo \
-  git
+  git \
+  go \
+  krb5-pkinit \
+  krb5-dev \
+  krb5
 
 # Set bash as the default shell
 SHELL ["/bin/bash", "-c"]
