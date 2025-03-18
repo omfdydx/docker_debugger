@@ -32,7 +32,10 @@ RUN git clone --branch 100.11.0 https://github.com/mongodb/mongo-tools.git && \
   cp bin/* /build/bin/ && \
   cd .. && \
   rm -rf mongo-tools
-
+ENV MONGOSH_VERSION=2.4.2
+RUN mkdir -p /build/mongosh
+RUN wget -qO- https://downloads.mongodb.com/compass/mongosh-${MONGOSH_VERSION}-linux-x64.tgz | tar -xz - -C /build/mongosh --strip-components=1 \
+    && mv /build/mongosh/bin/mongosh* /build/bin && rm -rf /build/mongosh
 # Create a lightweight image with only the tools
 FROM alpine:latest
 COPY --from=builder /build/bin/* /usr/local/bin/
