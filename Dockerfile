@@ -27,7 +27,7 @@ WORKDIR /build
 RUN mkdir -p /build/bin
 
 # Clone the MongoDB Tools repository and build it
-RUN git clone --branch 100.11.0 https://github.com/mongodb/mongo-tools.git && \
+RUN git clone --branch 100.12.2 https://github.com/mongodb/mongo-tools.git && \
   cd mongo-tools && \
   ./make build && \
   cp bin/* /build/bin/ && \
