@@ -64,4 +64,4 @@ $ screen -S __screen_name__
 
 $ mongodump <options> <connection-string>
 
-$ mongosh <options> <connection-string>
+$ mongorestore <options> <connection-string>
